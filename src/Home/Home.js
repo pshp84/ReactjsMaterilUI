@@ -3,9 +3,15 @@ import React, { useState } from "react";
 import { Box, TextField, Button, Container, Grid, Card, CardHeader, Avatar, IconButton, CardContent, Typography, MenuItem, Menu } from "@mui/material";
 import { red } from '@mui/material/colors';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { makeStyles } from '@mui/styles';
+import { makeStyles, withStyles, createStyles } from '@mui/styles';
 
 import StudentsData from './students.json';
+
+const styles = theme => ({
+    card: {
+      backgroundColor: theme.palette.cardBg.main
+    }
+  });
 
 const Home = () => {
     const [searchQuery, setSearchQuery] = useState('');
@@ -28,18 +34,32 @@ const Home = () => {
         setFilteredSearchData([...x]);
     }
 
-    const useStyles = makeStyles((theme) => ({
+    const useStyles = makeStyles((theme) =>
+    createStyles({
         root: {
-            backgroundColor: theme.palette.cardBg.main,
-            color: theme.palette.cardFont.main,
-            borderRadius: theme.palette.cardRadius.main
+            "& .MuiCard-root": {
+                borderRadius: theme.palette.cardRadius.main,
+            },
+            "& .MuiCardContent-root": {
+                backgroundColor: theme.palette.cardBg.main,
+                color: theme.palette.cardFont.main,
+              },
+
+            "& .MuiCardHeader-root": {
+                backgroundColor: theme.palette.cardBg.main,
+                color: theme.palette.cardFont.main,
+              },
         },
         buttonRoot: {
-            borderRadius: theme.palette.buttonRadius.main
+            "& .MuiButton-root": {
+                borderRadius: theme.palette.buttonRadius.main
+            }
         }
     }));
 
     const classes = useStyles();
+
+    
 
     return (
         <Container fixed sx={{ marginTop: "10px" }}>
@@ -52,6 +72,7 @@ const Home = () => {
                     {filteredSearchingList && filteredSearchingList.length > 0 ?
                         filteredSearchingList.map((data, ind) => (
                             <Card className={classes.root} sx={{ marginBottom: "10px" }} key={ind}>
+                                {console.log(classes.root)}
                                 <CardHeader
                                     avatar={
                                         <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -131,4 +152,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default withStyles(styles)(Home);
